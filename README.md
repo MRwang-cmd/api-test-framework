@@ -16,9 +16,11 @@
 
 ```
 api_test_project/
-├── test_demo.py          # 文章CRUD + 用户参数化测试
-├── test_posts.py         # 数据驱动创建文章测试
-├── conftest.py           # pytest fixture（base_url 等公共配置）
+├── test_demo.py               # 文章CRUD + 用户参数化测试
+├── test_posts.py              # 数据驱动创建文章测试
+├── test_users_posts.py        # 关联接口：用户→帖子归属验证
+├── test_create_and_verify.py  # 关联接口：POST创建后GET验证一致性
+├── conftest.py                # pytest fixture（base_url 等公共配置）
 ├── test_data/
 │   ├── users.json        # 用户测试数据
 │   └── posts.json        # 文章测试数据
@@ -39,6 +41,8 @@ api_test_project/
 
 ### 用户管理（feature）
 - 获取用户（数据驱动，5组用户ID）
+- 验证用户帖子归属（关联接口：GET /users → GET /users/{id}/posts）
+- POST 创建后 GET 验证一致性（写操作后验证持久化，含 JSONPlaceholder 模拟特性说明）
 
 ## 快速开始
 
@@ -51,10 +55,10 @@ venv\Scripts\activate
 pip install -r requirements.txt
 
 # 3. 运行测试
-pytest test_demo.py test_posts.py -v
+pytest -v
 
 # 4. 生成 Allure 报告
-pytest test_demo.py test_posts.py -v --alluredir=./allure-results --clean-alluredir
+pytest -v --alluredir=./allure-results --clean-alluredir
 allure serve ./allure-results
 ```
 
