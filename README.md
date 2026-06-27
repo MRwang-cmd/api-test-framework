@@ -1,6 +1,6 @@
 # 接口自动化测试框架
 
-基于 Python + Pytest + Requests + Allure 搭建的接口自动化测试框架，对 REST API 进行 CRUD 全流程自动化测试。
+基于 Python + Pytest + Requests + Allure 搭建的接口自动化测试框架，对 REST API 进行 CRUD 全流程自动化测试及 GitHub API 鉴权接口测试，共 **18 条**用例。
 
 ## 技术栈
 
@@ -20,6 +20,7 @@ api_test_project/
 ├── test_posts.py              # 数据驱动创建文章测试
 ├── test_users_posts.py        # 关联接口：用户→帖子归属验证
 ├── test_create_and_verify.py  # 关联接口：POST创建后GET验证一致性
+├── test_github_auth.py        # GitHub API 鉴权测试（含token/无token/查仓库）
 ├── conftest.py                # pytest fixture（base_url 等公共配置）
 ├── test_data/
 │   ├── users.json        # 用户测试数据
@@ -44,6 +45,11 @@ api_test_project/
 - 验证用户帖子归属（关联接口：GET /users → GET /users/{id}/posts）
 - POST 创建后 GET 验证一致性（写操作后验证持久化，含 JSONPlaceholder 模拟特性说明）
 
+### GitHub API 鉴权测试（feature）
+- 带 token 请求 `/user`，验证返回用户信息（200）
+- 不带 token 请求 `/user`，验证拒绝访问（401）
+- 带 token 请求 `/user/repos`，验证仓库列表包含项目仓库
+
 ## 快速开始
 
 ```bash
@@ -64,11 +70,13 @@ allure serve ./allure-results
 
 ## 被测接口
 
-[JSONPlaceholder](https://jsonplaceholder.typicode.com/) — 免费公开的 REST API，无需认证。
+- [JSONPlaceholder](https://jsonplaceholder.typicode.com/) — 免费公开的 REST API，无需认证
+- [GitHub REST API](https://docs.github.com/en/rest) — 需 Personal Access Token 鉴权
 
 ## 项目亮点
 
 - **数据驱动**：测试数据与代码分离，新增用例只需修改 JSON 文件
 - **fixture 管理**：通过 conftest.py 统一管理 base_url 等公共配置
+- **鉴权测试**：覆盖 token 鉴权（200 vs 401），模拟真实业务中的权限校验场景
 - **异常覆盖**：覆盖正常场景与异常场景（404）
 - **可视化报告**：Allure 报告按 feature/story 分组，可追溯每条用例的执行结果
